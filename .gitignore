@@ -1,0 +1,10 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+# Dependency directories
+# vendor/

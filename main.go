@@ -2,21 +2,21 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 	"time"
-	"encoding/json" 
+
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", ":8080", "http service address")
-
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true 
+		return true
 	},
 }
 
@@ -165,9 +165,11 @@ func main() {
 		http.ServeFile(w, r, "index.html")
 	})
 
-	fmt.Printf("Server starting on http://localhost:8080/ \n")
-	err := http.ListenAndServe(*addr, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+	// NEW: Dynamic port for Render
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
+	fmt.Printf("Server starting on http://localhost:%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
